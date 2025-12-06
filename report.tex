@@ -1,0 +1,336 @@
+\documentclass{article}
+
+% Language setting
+\usepackage[english]{babel}
+
+% Page size and margins
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{float} % For [H] option to fix tables and figures
+
+\title{Final Project Report - Security for Networked Systems}
+\author{Nisha Sarwar}
+
+\begin{document}
+\maketitle
+
+\section{Executive Summary}
+
+Organizations often invest either too little or too much in cybersecurity due to unclear risk levels and lack of structured decision making. This project proposes a tiered security model that classifies organizations into Low, Mid, High security tiers based on size, privacy requirements, threats, budget, and technical expertise. 
+
+The report includes a complete decision matrix, recommended defenses for each tier, and three practical technical demonstrations:
+\begin{enumerate}
+    \item A phishing simulation
+    \item A vulnerability scan using nmap
+    \item A firewall scenario using UFW
+\end{enumerate}
+
+For demonstration purposes, all these simulations are done on Jetstream, server and client VM provided in the course. 
+
+\section{Introduction}
+
+Cybersecurity threats continue to grow in complexity and frequency, still many organizations struggle to determine what level of defense is appropriate for them. Small organizations may overspend on complex systems they do not need, and large organizations may underestimate the threat exposures. 
+
+This project addresses that challenge by building a structured consultancy-styled framework to help organizations self assess their security needs and adopt appropriate defense level. The project includes hands-on demonstrations using Jetstream VMs running Ubuntu 22.04. These demonstrations show how different security tiers respond to real-world attacks. 
+
+\section{Tiered Security Framework}
+
+The model uses three tiers:
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{|p{4cm}|p{4cm}|p{4cm}|}
+\hline
+\textbf{Low Security Tier} & \textbf{Mid Security Tier} & \textbf{High Security Tier} \\ \hline
+
+\begin{itemize}
+    \item Small teams (less than 50 people)
+    \item Mostly public or non-sensitive data
+    \item Limited budget for security
+    \item Minimal threat exposure
+    \item No dedicated security staff
+\end{itemize}
+&
+\begin{itemize}
+    \item Small teams Medium-scale organizations (50–250 people)
+    \item Mix of internal and customer data
+    \item Subject to moderate risk and regulations
+    \item At least one person with security responsibilities
+\end{itemize}
+&
+\begin{itemize}
+    \item Large enterprises or high-value targets
+    \item Handle extremely sensitive, regulated, or financial data
+    \item Frequently targeted
+    \item Dedicated security teams and mature processes
+\end{itemize}
+\\ \hline
+\end{tabular}
+\caption{Tiered Security Framework: Organizational Characteristics}
+\end{table}
+
+\section{Threat Landscape by Tier}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{|p{4cm}|p{4cm}|p{4cm}|}
+\hline
+\textbf{Low Tier Threats} & \textbf{Mid Tier Threats} & \textbf{High Tier Threats} \\ \hline
+
+\begin{itemize}
+    \item Phishing
+    \item Credential stuffing
+    \item Basic malware
+    \item Misconfiguration exploits
+\end{itemize}
+&
+\begin{itemize}
+    \item Insider threats
+    \item Ransomware
+    \item Lateral Movement
+    \item Web application exploits
+\end{itemize}
+&
+\begin{itemize}
+    \item Advanced Persistent Threats (APTs)
+    \item Zero-day vulnerabilities
+    \item Supply chain compromises
+    \item Sophisticated spear-phishing
+\end{itemize}
+\\ \hline
+\end{tabular}
+\caption{Threat Landscape by Security Tier}
+\end{table}
+
+\section{Mitigation Strategies by Tier}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{|p{4cm}|p{4cm}|p{4cm}|}
+\hline
+\textbf{Low Tier Defenses} & \textbf{Mid Tier Defenses} & \textbf{High Tier Defenses} \\ \hline
+
+\begin{itemize}
+    \item Multi-factor authentication (MFA)
+    \item Basic firewall
+    \item Regulated system updates
+    \item Cloud managed security solutions
+    \item Security awareness training
+\end{itemize}
+&
+\begin{itemize}
+    \item Network segmentation
+    \item SIEM or log monitoring
+    \item Scheduled vulnerability scanning
+    \item Role based access control
+    \item Incident response plan
+\end{itemize}
+&
+\begin{itemize}
+    \item Zero trust architecture
+    \item 24/7 SOC monitoring
+    \item Threat intelligence feeds
+    \item Advanced EDR/XDR (Endpoint/Extended Detection and Response)
+    \item Red-teaming (simulation of real-world attacks by a group of security experts, the "red team")
+    \item periodic penetration testing
+\end{itemize}
+\\ \hline
+\end{tabular}
+\caption{Mitigation Strategies by Security Tier}
+\end{table}
+
+\section{Decision Matrix for Tier Classification}
+
+Organizations can score themselves in five dimensions:
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|p{4cm}|p{3.5cm}|p{4cm}|p{4cm}|}
+\hline
+\textbf{Factor} & \textbf{Score 1 (Low)} & \textbf{Score 2 (Medium)} & \textbf{Score 3 (High)} \\ \hline
+Organizational Size & \textless 50 employees & 50–250 & \textgreater 250 \\ \hline
+Data Sensitivity & Mostly public & Some personal/financial & Highly sensitive/regulated \\ \hline
+Threat Exposure & Rarely targeted & Occasional & Frequent / high-value target \\ \hline
+Security Budget & Minimal & Moderate & Dedicated budget \\ \hline
+Technical Expertise & No security staff & One IT/security staff & Security team \\ \hline
+\end{tabular}
+\caption{Decision Matrix for Tier Classification}
+\end{table}
+
+\textbf{Scoring}:
+\begin{itemize}
+    \item 5-7 $\rightarrow$ Low Tier
+    \item 8-11 $\rightarrow$ Mid Tier
+    \item 12-15 $\rightarrow$ High Tier
+\end{itemize}
+
+\section{Technical Demonstrations}
+
+All three demonstrations were conducted using Ubuntu 22.04.5 LTS on Jetstream.
+Commands and outputs are included so the experiment can be reproduced.
+
+\subsection{Demonstration A: Phishing Simulation}
+
+\textbf{Objective:} Show how a social engineering attack succeeds or fails depending on the organization’s security level.
+\\
+\textbf{Phishing Email (Safe Example)}
+\\
+\textbf{Subject:} Important: Account Verification Needed
+\\Dear User,Your account has been flagged for unusual login activity.Please verify your identity within 24 hours to avoid suspension.Verify Now: http://secure-update-support.com/login \\
+Thank you, Support Team
+
+\\
+\textbf{Red Flags Identified}
+\begin{itemize}
+    \item Urgent tone
+    \item Suspicious domain name
+    \item Generic greeting
+    \item Threat of account suspension
+\end{itemize}
+
+\textbf{Tier Responses}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|p{3cm}|p{11cm}|}
+\hline
+\textbf{Tier} & \textbf{Expected Response} \\ \hline
+\textbf{Low Tier} & Employees likely click the link; no phishing training; no email filtering. \\ \hline
+\textbf{Mid Tier} & Basic filtering may flag it; some users recognize suspicious link. \\ \hline
+\textbf{High Tier} & Advanced filtering blocks it; employees trained; domain reputation checks stop delivery. \\ \hline
+\end{tabular}
+\caption{Expected Organizational Response to Phishing Attempt by Tier}
+\end{table}
+
+\textbf{Phishing attack flow}
+
+Attacker $\rightarrow$ Fake Email $\rightarrow$ User Inbox $\rightarrow$ User Clicks Or Reports $\rightarrow$ Security Response
+
+\subsection{Demonstration B: Vulnerability Scan (Nmap)}
+
+\textbf{Objective:} Show how a simple network scan reveals exposed services.
+
+\textbf{Commands Executed}
+\begin{itemize}
+    \item From Client VM: \texttt{nmap -sV -O 192.168.122.183}
+    \item More Aggressive scan: \texttt{nmap -A 192.168.122.183}
+\end{itemize}
+
+\textbf{Output}
+
+% Resize images to fit page width
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{7.2 (nmap).png}
+    \caption{Initial Nmap Scan Output}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{7.2 (nmap2).png}
+    \caption{Aggressive Nmap Scan Output}
+\end{figure}
+
+\textbf{Interpretation:} 
+A vulnerability scan using Nmap was conducted on the server VM (192.168.122.183). The scan revealed two open services: SSH on port 22 and HTTP on port 80. SSH is exposed and could be targeted by brute-force attacks if not properly secured. The HTTP service is running the default Apache page, which is unnecessary for production and could expose information to attackers. Mitigation strategies include enabling key-based authentication for SSH, restricting access via firewall rules, keeping services updated, and replacing default web pages with the actual application content.
+
+\\
+\textbf{Tier Responses}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|p{2cm}|p{12cm}|}
+\hline
+\textbf{Tier} & \textbf{Response} \\ \hline
+Low & No action; unaware of open ports. \\ \hline
+Mid & Identify unnecessary services; schedule remediation. \\ \hline
+High & Continuous scanning + automated alerts; remove RPCbind; enforce hardened SSH policies. \\ \hline
+\end{tabular}
+\caption{Organizational Response to Vulnerability Scan by Security Tier}
+\end{table}
+
+
+\subsection{Demonstration C: Firewall Hardening (UFW)}
+
+\textbf{Objective:} Show the impact of enabling a firewall on reducing attack surface.
+
+\textbf{Step 1: Initial Scan (Before Firewall)}
+\begin{itemize}
+    \item \texttt{nmap 192.168.122.183} (Shows several open ports)
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{7.2 (nmap).png}
+    \caption{Initial Nmap Scan Output Before Firewall}
+\end{figure}
+
+\textbf{Step 2: Enable Firewall}
+\begin{verbatim}
+sudo ufw enable
+sudo ufw deny 22
+sudo ufw allow 80
+sudo ufw status
+\end{verbatim}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{7.3.png}
+    \caption{Nmap Scan After Firewall Hardening}
+\end{figure}
+
+\textbf{Interpretation:} 
+After enabling the firewall (UFW) and blocking unnecessary ports, a follow-up Nmap scan shows that only port 80 (HTTP) is open, and all other previously exposed ports, such as SSH and RPCbind, are filtered. This demonstrates that firewall hardening effectively reduces the system’s attack surface. The OS detection results are less reliable due to only one open port, but the scan confirms that network-level access is restricted according to security best practices.
+
+\textbf{Tier Responses}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|p{2cm}|p{12cm}|}
+\hline
+\textbf{Tier} & \textbf{Response} \\ \hline
+Low & No firewall or misconfigured; all ports exposed. \\ \hline
+Mid & Basic UFW rules applied manually; some ports blocked. \\ \hline
+High & Only required ports open (e.g., HTTP); all others filtered; continuous monitoring. \\ \hline
+\end{tabular}
+\caption{Organizational Response to Firewall Hardening by Security Tier}
+\end{table}
+
+
+\section{Business Value Analysis}
+
+The tiered security framework provides several practical benefits for organizations:
+
+\begin{description}
+    \item[\textbf{Cost Efficiency}] 
+    Helps organizations spend on security where it’s needed and avoid unnecessary tools.
+    
+    \item[\textbf{Risk Reduction}] 
+    Aligns defenses with the level of threat, lowering the chance and impact of incidents.
+    
+    \item[\textbf{Decision Clarity}] 
+    Provides a clear, structured way for executives to assess their organization's security posture.
+    
+    \item[\textbf{Operational Improvement}] 
+    Demonstrates concrete steps organizations can take, even with limited resources, to improve security.
+\end{description}
+
+
+\section{Conclusion}
+
+Cybersecurity is not one-size-fits-all. This project demonstrates a practical approach through a tiered framework, decision matrices, and real technical demonstrations using Jetstream VMs. The combination of social engineering, scanning, and firewall hardening effectively illustrates how different organizations should respond based on maturity and resources.
+
+The framework can be expanded in the future by integrating automation, real-time threat intelligence, and machine-learning-based risk scoring.
+
+\end{document}
