@@ -1,6 +1,3 @@
-Here’s a **ready-to-use, professional README.md** for your GitHub repository. It matches your project and includes instructions for your scripts, report, and scans.
-
----
 
 ```markdown
 # Tiered Security Framework
